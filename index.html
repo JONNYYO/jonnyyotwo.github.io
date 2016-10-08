@@ -1,1 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- EXTERNAL LIBS-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
+    <!-- EXAMPLE SCRIPT -->
+    <script type="text/javascript">
+      // onload callback
+      google.charts.load('current', {'packages':['gauge']});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var public_key = 'G2g6b016rnsLVxGm2LQd';
+        // JSONP request
+        var jsonData = $.ajax({
+          url: 'https://data.sparkfun.com/output/' + public_key + '.json?gt[timestamp]=now%20-1hour',
+          data: {page: 1},
+          dataType: 'jsonp',
+        })//.done(function (results) {
+//          var data = new google.visualization.DataTable();
+//          data.addColumn('datetime', 'Time');
+//          data.addColumn('number', 'Power');
+//          $.each(results, function (i, row) {
+//            data.addRow([
+//              (new Date(row.timestamp)),
+//              parseFloat(row.power)
+//            ]);
+//          });
+          var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['Memory', 80],
+          ['CPU', 55],
+          ['Network', 68]
+        ]);
+        
+          var options = {
+          width: 400, height: 120,
+          redFrom: 90, redTo: 100,
+          yellowFrom:75, yellowTo: 90,
+          minorTicks: 5
+        };
+          
+          var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+          chart.draw(data, options);
+        });
+      }
+      // load chart lib
+      google.load('visualization', '1', {
+        packages: ['corechart']
+      });
+      // call drawChart once google charts is loaded
+      google.setOnLoadCallback(drawChart);
+//      setInterval(drawChart, 5000);
+      drawchart();
+      
+    </script>
+
+  </head>
+  <body>
+    <div id="chart" style="width: 100%;"></div>
+  </body>
+</html>
